@@ -33,9 +33,12 @@ class InferenceNetwork(object):
         # Query classification
         model_file = "inference/models/classifiers/query_classifier.pkl"
         query_clf = joblib.load(model_file)
-        self.node_type = query_clf.predict([query.lower()])[0]
+        # self.node_type = query_clf.predict([query.lower()])[0]
+        # self.node_type='info'
+        self.final=query_clf
 
     def response(self):
+        return self.query
         """
         Function to return the the response bases on the query.
 

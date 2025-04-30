@@ -1,3 +1,4 @@
+from inference.gemini import InferenceNetwork
 from modules.analysis import isNBA
 from modules.scraper import get_playoff_bracket, get_standings
 from modules.transformer import create_html_bracket
@@ -143,9 +144,17 @@ Bot response : json
 @app.route("/bot-msg", methods=['POST'])
 def get_bot_response():
     usr_msg = request.form['msg']
-    handler = Query(usr_msg)
-    response = handler.process()
-    return jsonify(response)
+    # handler = Query(usr_msg)
+    # response = handler.process()
+    # return jsonify(response)
+    try:
+       inference_handler = InferenceNetwork(usr_msg)
+       response_text = inference_handler.response() 
+       return jsonify(response_text) # Structure response as needed
+    except Exception as e:
+       print(f"Error during inference: {e}")
+       return jsonify({"error": "Failed to process request"}), 500
+
 
 if __name__ == "__main__":
     app.run()
