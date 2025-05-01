@@ -1,5 +1,6 @@
 from inference.gemini import InferenceNetwork
 from modules.analysis import isNBA
+from modules.blogs.getting_new_blogs import GettingNewBlogs
 from modules.scraper import get_playoff_bracket, get_standings
 from modules.transformer import create_html_bracket
 from modules.query import Query
@@ -7,7 +8,7 @@ from data.text_data import unsure, non_nba
 from flask import Flask, render_template, request, jsonify, redirect
 
 app = Flask(__name__)
-
+blog_list = []
 
 
 """
@@ -58,9 +59,21 @@ Returns
 HTML file
     Rendering of HTML template for blog page
 """
-@app.route("/blog")
-def blog():
-    return render_template("blogs.html")
+@app.route("/blogs")
+def blogs():
+    global blog_list
+    if len(blog_list) == 0:
+        blog_list = GettingNewBlogs().get_new_blogs()
+    return render_template("blogs.html", blogs=blog_list)
+
+@app.route("/blog/<slug>")
+def blog(slug):
+    global blog_list
+    # Lấy bài viết theo slug
+    blog = next((b for b in blog_list if b['title'] == slug), None)
+    if blog is None:
+        return jsonify({"error": "Blog not found"}), 404
+    return render_template("blog.html", blog=blog)
 
 """
 Function to handle routing to authors page.

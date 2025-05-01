@@ -56,7 +56,7 @@
                                             Insights
                                         </a>
                                         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                            <a class="dropdown-item" href="{{ url_for('blog') }}">Blogs</a>
+                                            <a class="dropdown-item" href="{{ url_for('blogs') }}">Blogs</a>
                                             <a class="dropdown-item"
                                                href="{{ url_for('predictions') }}">Predictions</a>
                                         </div>
@@ -91,76 +91,35 @@
         <div style="width:1000px; margin:0 auto;">
             <!-- Search form -->          
             <div class="row tm-row">
+                {% for blog in blogs %}
                 <article class="col-12 col-md-6 tm-post">
                     <hr class="tm-hr-primary">
                     <!-- Requires tm-pt-60 for badge  -->
-                    <a href='/download/1' class="effect-lily tm-post-link tm-pt-20">
+                    <a href="{{ url_for('blog', slug=blog['title']) }}"  class="effect-lily tm-post-link tm-pt-20">
                         <div class="tm-post-link-inner">
-                            <img src="{{url_for('static', filename='img/AI-Orange.png')}}" alt="Image" class="img-fluid">                            
+                            <img src="{{ blog['img_cover'] }}" alt="Image" class="img-fluid">
                         </div>
                         <!-- <span class="position-absolute tm-new-badge">New</span> -->
-                        <h2 class="tm-pt-30 tm-color-primary tm-post-title">Random Blog #1</h2>
-                    </a>                    
+                        <h2 class="tm-pt-30 tm-color-primary tm-post-title">{{ blog['title'] }}</h2>
+                    </a>
                     <p class="tm-pt-30">
-                        This is a mock description of this blog article. It is about stuff that hasn't been written
-                        and could end up being pretty cool.
+                        {{ blog['subtitle'] }}
                     </p>
                     <div class="d-flex justify-content-between tm-pt-45">
-                        <span class="tm-color-primary">Tag 1 . Tag 2</span>
-                        <span class="tm-color-primary">October 1, 2020</span>
+                        <span class="tm-color-primary">
+                            {% for tag in blog['tags'] %}
+                            #{{ tag }} <br>
+                            {% endfor %}
+                        </span>
+                        <span class="tm-color-primary">{{ blog['post_time'] }}</span>
                     </div>
                     <hr>
                     <div class="d-flex justify-content-between">
-                        <span>by Author Name</span>
+                        <span>by {{ blog['author'] }}</span>
                     </div>
                 </article>
-                <article class="col-12 col-md-6 tm-post">
-                    <hr class="tm-hr-primary">
-                    <!-- Requires tm-pt-60 for badge  -->
-                    <a href='/download/2' class="effect-lily tm-post-link tm-pt-20">
-                        <param name="autoplay" value="true">
-                        <div class="tm-post-link-inner">
-                            <img src="{{url_for('static', filename='img/AI-Orange.png')}}" alt="Image" class="img-fluid">                            
-                        </div>
-                        <!-- <span class="position-absolute tm-new-badge">New</span> -->
-                        <h2 class="tm-pt-30 tm-color-primary tm-post-title">Random Blog #2</h2>
-                    </a>                    
-                    <p class="tm-pt-30">
-                        This is a mock description of this blog article. It is about stuff that hasn't been written
-                        and could end up being pretty cool!
-                    </p>
-                    <div class="d-flex justify-content-between tm-pt-45">
-                        <span class="tm-color-primary">Tag 1 . Tag 2</span>
-                        <span class="tm-color-primary">October 1, 2020</span>
-                    </div>
-                    <hr>
-                    <div class="d-flex justify-content-between">
-                        <span>by John Smith</span>
-                    </div>
-                </article>
-                <article class="col-12 col-md-6 tm-post">
-                    <hr class="tm-hr-primary">
-                    <!-- Requires tm-pt-60 for badge  -->
-                    <a href='/download/3' class="effect-lily tm-post-link tm-pt-20">
-                        <div class="tm-post-link-inner">
-                            <img src="{{url_for('static', filename='img/AI-Orange.png')}}" alt="Image" class="img-fluid">                            
-                        </div>
-                        <!-- <span class="position-absolute tm-new-badge">New</span> -->
-                        <h2 class="tm-pt-30 tm-color-primary tm-post-title">Random Blog #3</h2>
-                    </a>                    
-                    <p class="tm-pt-30">
-                        This is a mock description of this blog article. It is about stuff that hasn't been written
-                        and could end up being pretty cool.
-                    </p>
-                    <div class="d-flex justify-content-between tm-pt-45">
-                        <span class="tm-color-primary">Tag 1 . Tag 2</span>
-                        <span class="tm-color-primary">October 1, 2020</span>
-                    </div>
-                    <hr>
-                    <div class="d-flex justify-content-between">
-                        <span>by Jane Doe</span>
-                    </div>
-                </article>
+
+                {% endfor %}
             </div>
         </div>    
   </div>
