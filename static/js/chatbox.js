@@ -40,13 +40,15 @@ async function chatbotResponse() {
 
 async function newmsg(){
     var data = $("#btn-input").val();
+    var formattedData = String(data).replace(/\n/g, '<br>');
 
-    $('chat_log').append('<div class="row msg_container base_sent"><div class="messages msg_sent"><p>'+data+'</p></div></div>');
+    $('chat_log').append('<div class="row msg_container base_sent"><div class="messages msg_sent"><p>'+formattedData+'</p></div></div>');
     clearInput();
     lastUserMessage = String(data);
     botMessage = 'TEST';
     await chatbotResponse();
-    $('chat_log').append('<div class="row msg_container base_receive"><div class="messages msg_receive"><p>'+botMessage+'</p></div></div>')
+    var formattedBotMessage = String(botMessage).replace(/\n/g, '<br>');
+    $('chat_log').append('<div class="row msg_container base_receive"><div class="messages msg_receive"><p>'+formattedBotMessage+'</p></div></div>')
 
     messages.push(data);
     //Speech(botMessage) // Turned speech off, recommend adding a toggle switch so user can choose 
