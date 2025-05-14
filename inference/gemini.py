@@ -1,30 +1,12 @@
 from google import genai
 from google.genai.types import Tool,GenerateContentConfig, GoogleSearch
-# Potentially keep these if needed for specific filtering or pre-defined answers
-# from data.text_data import unsure, non_nba 
-# from modules.analysis import isNBA # You might not need isNBA if Gemini handles context
 
-# --- It's highly recommended to load API keys securely, e.g., from environment variables ---
-# Example: Load from environment variable
-# GOOGLE_API_KEY = os.getenv('GOOGLE_API_KEY') 
-# Or uncomment and paste directly (less secure for production)
-# GOOGLE_API_KEY = "YOUR_API_KEY" 
-
-# Configure the Gemini client library
-# try:
-#     # Securely configure the API key (best practice)
 GOOGLE_API_KEY = 'AIzaSyBSbxCDL6j8UJobJJN8ghAlR1ReQSW_FdE'
-#     if not GOOGLE_API_KEY:
-#         raise ValueError("GOOGLE_API_KEY environment variable not set.")
-#     genai.configure(api_key=GOOGLE_API_KEY)
-# except Exception as e:
-#     print(f"Error configuring Gemini API: {e}")
-#     # Handle the error appropriately - maybe disable Gemini features
 
 client = genai.Client(api_key=GOOGLE_API_KEY)
 model_id = "gemini-2.0-flash"
 
-class InferenceNetwork(object):
+class GeminiResponse(object):
     """
     A class to facilitate query inference using the Google Gemini API.
 
@@ -73,13 +55,12 @@ class InferenceNetwork(object):
         # --- Construct the prompt for Gemini ---
         # Keep the persona instructions. The model decides when to use Search.
         prompt = f"""You are a helpful assistant specializing in NBA (National Basketball Association) information.
-Your knowledge includes players, teams, stats, history, rules, and recent events related to the NBA.
-Use your internal knowledge and search the web if necessary for the most current information to answer accurately.
-Please answer the following question:
+                    Your knowledge includes players, teams, stats, history, rules, and recent events related to the NBA.
+                    Use your internal knowledge and search the web if necessary for the most current information to answer accurately.
+                    Please answer the following question:
+                    Question: "{self.query}"
 
-Question: "{self.query}"
-
-Answer:"""
+                """
 
         try:
             # --- Call the Gemini API with the Search tool enabled ---
@@ -93,8 +74,12 @@ Answer:"""
                  # Pass the configured tool
             )
             print(gemini_response)
+            final_respnse="";
             for each in gemini_response.candidates[0].content.parts:
-                    print(each.text)
+                final_respnse+=each.text
+                print(each.text)
+                
+            # return final_respnse
             return gemini_response.candidates[0].content.parts[0].text
 # Example response:
 # The next total solar eclipse visible in the contiguous United States will be on ...

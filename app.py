@@ -1,4 +1,4 @@
-from inference.gemini import InferenceNetwork
+from inference.gemini import GeminiResponse
 from modules.analysis import isNBA
 from modules.blogs.getting_new_blogs import GettingNewBlogs
 from modules.scraper import get_playoff_bracket, get_standings
@@ -161,7 +161,7 @@ def get_bot_response():
     # response = handler.process()
     # return jsonify(response)
     try:
-       inference_handler = InferenceNetwork(usr_msg)
+       inference_handler = GeminiResponse(usr_msg)
        response_text = inference_handler.response() 
        return jsonify(response_text) # Structure response as needed
     except Exception as e:
